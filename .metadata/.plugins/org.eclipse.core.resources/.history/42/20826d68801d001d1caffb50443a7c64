@@ -1,0 +1,101 @@
+#include "main.h"
+#include <stdint.h>
+
+uint32_t* GPIOE_ODR = (uint32_t*)0x40021014;//truoc khi ta setup thi ta disenable con slave
+#define INACTIVE_SPI  *GPIOE_ODR |= (1<<3);
+#define ACTIVE_SPI  *GPIOE_ODR &= ~ (1<<3);
+unsigned char id;
+void spi_init()
+{
+
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	uint32_t* GPIOA_MODER = (uint32_t*)0x40020000;
+	uint32_t* GPIOA_AFRL = (uint32_t*)0x40020020;
+	*GPIOA_MODER &= ~ (0b111111<<10); //PA5,PA6,PA7
+	*GPIOA_MODER |= (0b10 << 10) | (0b10 << 12) | (0b10 << 14);//10: alternate function -> 0b10 = 2
+	*GPIOA_AFRL &= ~ (0xfff << 20); //0b111111111111 = 0xffff
+	*GPIOA_AFRL |= (4<<20) | (4<<24) | (4<<28);// AF5 = 0101
+
+
+	//set chân cho SS
+	__HAL_RCC_GPIOE_CLK_ENABLE();
+	uint32_t* GPIOE_MODER = (uint32_t*)0x40021000;
+
+	*GPIOE_MODER &= ~ (0b11<<6);//pE3
+	*GPIOE_MODER |= (0b01<<6);
+
+
+	// set chân SPI, xem trong bảng alternate function mapping thấy PA5,PA6,PA7 -> SPI1
+	INACTIVE_SPI;
+	__HAL_RCC_SPI1_CLK_ENABLE();
+	uint32_t* I2SCFGR = (uint32_t*)0x4001301c;
+	*I2SCFGR &= ~(0b11<<8);
+	*I2SCFGR |= 0b10<<8;		// set master cho kit
+
+	uint32_t* SPI1_CR1  = (uint32_t*)0x40013000;
+	*SPI1_CR1 |= (1<<2);  //set là master, MSTR
+	*SPI1_CR1 &= ~(0b111<<3);
+	*SPI1_CR1 |= (0b011<<3);// fspi/16 = 1Mhz (fspi =16 -> Vào memory and bus architec thấy SPI1 nằm trong bus APB2 -> ioc cấp 16mhz: 16/16 thì scl phát xung ra là 1mhz -> 1ms/1bit(1/1tr giay) nhanh hơn hơn uart 1/9600)  set baudrate , bit 5: 011 fpclk/16
+	//-->baudrate là tần so cấp cho chân clk (scl),con nào phát xung thì là master mã ta xét SPI ở đây hđ là master thì phải xét clk cho nó
+	*SPI1_CR1 |= (1<<9);//Bit 9 SSM: Software slave management, software thì ta có thể dùng GPIO bật chân SSlên cho tiện, NSS = SS_gạch chân này active ở mức thấp
+	*SPI1_CR1 |= (1<<8);//Bit 8 SSI: Internal slave select, su dung ssm thì bật cái này
+	//ta xài mode mac dinh mode 0
+	*SPI1_CR1 &= ~(1<<1);//Bit1 CPOL: Clock polarity
+	*SPI1_CR1 &= ~(0<<0);//Bit 0 CPHA: Clock phase
+
+	*SPI1_CR1 |= (1<<6);//Bit 6 SPE: SPI enable
+
+}
+
+void spi_send (char data)
+{
+	uint32_t* SPI1_SR = (uint32_t*)0x40013008;
+	uint8_t* SPI1_DR = (uint8_t*)0x4001300c;// ta khai báo thanh ghi 8bit, moii lân gui 1byte. khai báo 16 bit nó sẽ split into 2 bufer
+	//truoc khi ghi dữ liệu kiểm tra bit TXE có trống ko
+	while(((*SPI1_SR >> 1) & 1) == 0);//nếu khác 1 thì ta chờ đến khi nào nó bằng 1 thì ta dừng lại,
+	//sau khi bang 1 nó trống rồi thì tiến hành ghi vào thanh ghi DR
+	*SPI1_DR = data;
+	//sau đó ta chờ đe kiểm tra dữ liệu duoc gui đi hay chưa, ta check bit so 7. Bit 7 BSY: Busy flag
+	while(((*SPI1_SR >> 1) & 1) == 1);//chờ hoài
+	//kiểm tra RXNE có dữ liệu gửi về ko, chờ dữ liệu rác về -> rác về lên 1
+	while(((*SPI1_SR >> 0) & 1) != 1);//cho tới khi có dữ liệu về
+	while(((*SPI1_SR >> 7) & 1) == 1);
+	//tiến hành đọc dữ liệu trong thanh ghi DR ra, đọc ra ko xu lý gì cả chỉ nhằm xóa dữ liệu rác
+	uint8_t temp = *SPI1_DR; //ta muốn đọc thì chỉ cần gọi tên ra, ép kiểu (tùy kiểu muốn úp) để compiler ko xóa code khi ta gọi mà ko xài
+
+
+}
+
+char spi_recv()
+{
+	uint32_t* SPI1_SR = (uint32_t*)0x40013008;
+		uint8_t* SPI1_DR = (uint8_t*)0x4001300c;// ta khai báo thanh ghi 8bit, moii lân gui 1byte. khai báo 16 bit nó sẽ split into 2 bufer
+		//truoc khi ghi dữ liệu kiểm tra bit TXE có trống ko
+		while(((*SPI1_SR >> 1) & 1) != 1);//nếu khác 1 thì ta chờ đến khi nào nó bằng 1 thì ta dừng lại,
+		//sau khi bang 1 nó trống rồi thì tiến hành ghi vào thanh ghi DR
+		*SPI1_DR = 0xff;//ta gui du liệu rác
+		//sau đó ta chờ dữ liệu duoc gui đi, ta check bit so 7. Bit 7 BSY: Busy flag
+		while(((*SPI1_SR >> 1) & 1) == 1);//chờ hoài
+		//kiểm tra RXNE có dữ liệu gửi về ko
+		while(((*SPI1_SR >> 0) & 1) != 1);//cho tới khi có dữ liệu về
+		while(((*SPI1_SR >> 7) & 1) == 1);
+		//tiến hành đọc dữ liệu trong thanh ghi DR ra, đọc ra xu lý
+		char temp = *SPI1_DR;
+		return  temp;
+
+}
+
+
+void main()
+{
+	spi_init();
+	ACTIVE_SPI;
+	spi_send(0x0f | (1 << 7));
+	id = spi_recv();
+	INACTIVE_SPI;
+
+	while(1)
+	{
+
+	}
+}

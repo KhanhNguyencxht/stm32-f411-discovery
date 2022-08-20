@@ -1,0 +1,42 @@
+10:17:13 **** Incremental Build of configuration Debug for project nutnhan_led ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'set_led':
+../Core/Src/main.c:6:26: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    6 |  uint32_t *GPIOD_MODER = 0x40020c00;
+      |                          ^~~~~~~~~~
+../Core/Src/main.c: In function 'set_nutnhan':
+../Core/Src/main.c:18:26: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   18 |  uint32_t *GPIOA_MODER = 0x40020000;
+      |                          ^~~~~~~~~~
+../Core/Src/main.c:20:26: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   20 |  uint32_t *GPIOA_PUPDR = 0x4002000c;
+      |                          ^~~~~~~~~~
+../Core/Src/main.c: In function 'trang_thai_nutnhan':
+../Core/Src/main.c:25:24: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |  uint32_t *GPIOA_IDR = 0x40020010;
+      |                        ^~~~~~~~~~
+../Core/Src/main.c: In function 'led_nhay':
+../Core/Src/main.c:34:24: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   34 |  uint32_t *GPIOD_ODR = 0x40020c14;
+      |                        ^~~~~~~~~~
+../Core/Src/main.c:56:1: warning: control reaches end of non-void function [-Wreturn-type]
+   56 | }
+      | ^
+arm-none-eabi-gcc -o "nutnhan_led.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\Nhung\bai_tap\nutnhan_led\STM32F411VEHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="nutnhan_led.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: nutnhan_led.elf
+ 
+arm-none-eabi-size   nutnhan_led.elf 
+arm-none-eabi-objdump -h -S  nutnhan_led.elf  > "nutnhan_led.list"
+arm-none-eabi-objcopy  -O binary  nutnhan_led.elf  "nutnhan_led.bin"
+   text	   data	    bss	    dec	    hex	filename
+   2104	     20	   1572	   3696	    e70	nutnhan_led.elf
+Finished building: default.size.stdout
+ 
+Finished building: nutnhan_led.bin
+Finished building: nutnhan_led.list
+ 
+ 
+
+10:17:13 Build Finished. 0 errors, 6 warnings. (took 486ms)
+

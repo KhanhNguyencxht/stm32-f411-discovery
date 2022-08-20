@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;ngat_ngoai&apos; to &apos;nutnhan_led&apos;" description="Rename resource &apos;ngat_ngoai&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/ngat_ngoai" name="nutnhan_led" stamp="1656767165711" updateReferences="true"/>
+</session>

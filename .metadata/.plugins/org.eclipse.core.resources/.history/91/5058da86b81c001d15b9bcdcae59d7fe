@@ -1,0 +1,65 @@
+#include <stdint.h>
+#include "main.h"
+
+void setup();
+void truyen(char sad_bit, char id);
+char nhan();
+
+int main(){
+	HAL_Init();
+	setup;
+
+	char sad_7bit = 0b11001<<1;		//(0x19)<<1 7 bit + 1 bit chế độ đọc ghi là 8 bit
+	char id_cb = 0x0f;
+
+	while(1){
+		truyen(sad_7bit, id_cb);
+	}
+	return 0;
+}
+
+void setup(){
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	uint32_t* MODERB = (uint32_t*)0x40020400;
+	*MODERB &= ~(0b11111111<<12);
+	*MODERB |= 0b01<<12 | 0b01<<18;
+
+	uint32_t* PUPDRB = (uint32_t*)0x4002040c;
+	*PUPDRB &= ~(0b00<<12);
+	*PUPDRB &= ~(0b00<<18);
+	*PUPDRB |= 0b01<<12 |0b01<<18;		// gim áp chân SCL, SDA áp mức cao
+
+	uint32_t* AFRL = (uint32_t*)0x40020420;
+	*AFRL &= ~(0b0000<<24);
+	*AFRL |= 0b0100<<24;				// set bộ ngoại vi chân SCL(PB6)
+
+	uint32_t* AFRH = (uint32_t*)0x40020424;
+	*AFRH &= ~(0b1111<<4);
+	*AFRH |= 0b0100<<4;					// set bộ ngoại vi chân SDA(PB9)
+
+	__HAL_RCC_I2C1_CLK_ENABLE();
+	uint32_t* CR1 = (uint32_t*)0x40005400;
+	uint32_t* CR2 = (uint32_t*)0x40005404;
+	uint32_t* CCR = (uint32_t*)0x4000541c;
+
+	*CR1 &= ~(1<<0);					// TẮT i2c để set xung clock
+	*CR2 |= 16<<0;						// set xung cho I2C 16mhz
+	*CCR = 80;							// 16mhz /80 = 200k, set bộ chia chế độ Sm mode
+	*CR1 |= 1<<0;						// bật i2c
+
+}
+
+void truyen(char sad_8bit, char id){
+	uint32_t* DR = (uint32_t*)0x40005410;
+	uint32_t* SR1 = (uint32_t*)0x40005414;
+	uint32_t* SR2 = (uint32_t*)0x40005418;
+	uint32_t* CR1 = (uint32_t*)0x40005400;
+
+	while(((*SR2>>1)&1)==1){}			// trạng thái đợi bit BuSY đang có dữ liệu, đang bận
+	*CR1 |= 1<<8; 						// 	start bit bật nhận dữ liệu
+	while(((*SR1>>1)&1)==0){}			// trạng thái đợi khi ADDR chưa nhận được(bật bit start)
+	*DR = sad_8bit |(0<<0);				// gửi địa chỉ 7 bit + bit R(0) vào thanh ghi
+	while(((*SR1>>1)&1)==0){}			// trạng thái kiểm tra DR gửi dữ liệu chưa
+	uint32_t* clear = *SR2				// đọc SR1(software), đọc SR2 để clear ADDR
+	*DR = id;							// gửi địa chỉ đọc id cảm biến
+}

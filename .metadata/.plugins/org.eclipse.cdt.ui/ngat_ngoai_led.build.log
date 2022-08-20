@@ -1,0 +1,66 @@
+23:06:02 **** Incremental Build of configuration Debug for project ngat_ngoai_led ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:23:21: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   23 |  void* diachi_ram = 0x20000000;       // khai báo địa chỉ ram dưới dạng con trở hàm void*
+      |                     ^~~~~~~~~~
+../Core/Src/main.c:24:23: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |  void* diachi_flash = 0x08000000;  // khai báo địa chỉ ram dưới dạng con trở hàm void*
+      |                       ^~~~~~~~~~
+../Core/Src/main.c:27:19: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+   27 |  uint32_t* VTOR = 0xe000ed08;   // khai báo địa chỉ bảng vector table cũ dưới flash
+      |                   ^~~~~~~~~~
+../Core/Src/main.c:30:25: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   30 |  uint32_t* dk_hamngat = 0x2000005C;       // đăng ký địa chỉ hàm ngắt mới vào ram theo địa chỉ PA  EXTI
+      |                         ^~~~~~~~~~
+../Core/Src/main.c: In function 'setup_led':
+../Core/Src/main.c:47:26: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   47 |  uint32_t* GPIOD_MODER = 0x40020c00;
+      |                          ^~~~~~~~~~
+../Core/Src/main.c: In function 'setup_button':
+../Core/Src/main.c:54:26: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   54 |  uint32_t* GPIOA_MODER = 0x40020000;  //reset, khai báo đầu vào là input
+      |                          ^~~~~~~~~~
+../Core/Src/main.c:56:26: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   56 |  uint32_t* GPIOA_PUPDR = 0x4002000c;  // gim điện áp xuống mức 0
+      |                          ^~~~~~~~~~
+../Core/Src/main.c:58:24: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   58 |  uint32_t* EXTI_RTSR = 0x40013c08;    // nhấn nút xong thả điện áp đi lên mức 1 mới nhận tín hiệu
+      |                        ^~~~~~~~~~
+../Core/Src/main.c:60:23: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   60 |  uint32_t* EXTI_IMR = 0x40013c00;     // bật hàm ngắt, điện áp lên 1, nếu để ở 0 thì đầu ra sẽ là 0
+      |                       ^~~~~~~~~~
+../Core/Src/main.c:62:25: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+   62 |  uint32_t* NVIC_ISER0 = 0xe000e100;   // ưu tiên thực hiện ngắt, số càng bé ưu tien trước, P0 là 6, P1 là 7......
+      |                         ^~~~~~~~~~
+../Core/Src/main.c: In function 'tinhieu_nutnhan':
+../Core/Src/main.c:67:24: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   67 |  uint32_t* GPIOA_IDR = 0x40020010;
+      |                        ^~~~~~~~~~
+../Core/Src/main.c: In function 'led_nhay_ngat':
+../Core/Src/main.c:84:24: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   84 |  uint32_t* GPIOD_ODR = 0x40020c14;
+      |                        ^~~~~~~~~~
+../Core/Src/main.c: In function 'led_nhay_main':
+../Core/Src/main.c:99:24: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   99 |  uint32_t* GPIOD_ODR = 0x40020c14;
+      |                        ^~~~~~~~~~
+../Core/Src/main.c: In function 'hamngat':
+../Core/Src/main.c:114:17: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  114 |  uint32_t* PR = 0x40013c14;
+      |                 ^~~~~~~~~~
+arm-none-eabi-gcc -o "ngat_ngoai_led.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\Nhung\bai_tap\ngat_ngoai_led\STM32F411VEHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ngat_ngoai_led.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ngat_ngoai_led.elf
+ 
+arm-none-eabi-size   ngat_ngoai_led.elf 
+arm-none-eabi-objdump -h -S  ngat_ngoai_led.elf  > "ngat_ngoai_led.list"
+   text	   data	    bss	    dec	    hex	filename
+   2356	     20	   1572	   3948	    f6c	ngat_ngoai_led.elf
+Finished building: default.size.stdout
+ 
+Finished building: ngat_ngoai_led.list
+ 
+
+23:06:02 Build Finished. 0 errors, 14 warnings. (took 591ms)
+

@@ -1,0 +1,32 @@
+#include <stdint.h>
+#include "main.h"
+
+void setup();
+void truyen(char data);
+char nhan();
+
+int main(){
+	HAL_Init();
+	setup;
+	while(1){
+
+	}
+	return 0;
+}
+
+void setup(){
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	uint32_t* MODERB = (uint32_t*)0x40020400;
+	uint32_t* PUPDRB = (uint32_t*)0x4002040c;
+
+	*MODERB &= ~(0b11111111<<12);
+	*MODERB |= 0b01<<12 | 0b01<<18;
+
+	uint32_t* AFRL = (uint32_t*)0x40020420;
+	*AFRL &= ~(0b0000<<24);
+	*AFRL |= 0b0100<<24;		// set bộ ngoại vi chân SCL(PB6)
+
+	uint32_t* AFRH = (uint32_t*)0x40020424;
+	*AFRH &= ~(0b1111<<4);
+	*AFRH |= 0b0100<<4;			// set bộ ngoại vi chân SDA(PB9)
+}

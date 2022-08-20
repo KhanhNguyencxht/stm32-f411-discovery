@@ -1,0 +1,6 @@
+../Core/Src/main.c:13:5:main	24	static
+../Core/Src/main.c:37:6:setup_timer	32	static
+../Core/Src/main.c:51:6:setup_led	16	static
+../Core/Src/main.c:58:6:tim1	16	static,ignoring_inline_asm
+../Core/Src/main.c:67:6:TIM1_UP_TIM10_IRQHandler	16	static
+../Core/Src/main.c:72:6:nhay_led	24	static

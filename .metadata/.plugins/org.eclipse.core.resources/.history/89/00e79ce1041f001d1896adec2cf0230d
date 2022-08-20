@@ -1,0 +1,16 @@
+#include <stdint.h>
+#include "main.h"
+
+void xoa_flash();
+void ghi_flash();
+
+int main(){
+
+	return 0;
+}
+
+void xoa_flash(){
+	uint32_t* SR = (uint32_t*)0x40023c0c;
+	uint32_t* KEYR = (uint32_t*)0x40023c04;
+	uint32_t* CR = (uint32_t*)0x40023c10;
+}

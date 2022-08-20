@@ -1,0 +1,67 @@
+23:08:24 **** Incremental Build of configuration Debug for project UART ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:19:7: warning: unused variable 'truyen' [-Wunused-variable]
+   19 |  char truyen[] = "xin chao ban \r\n";
+      |       ^~~~~~
+../Core/Src/main.c: In function 'setup_uart2':
+../Core/Src/main.c:30:20: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   30 |  uint32_t* MODER = 0x40020000;
+      |                    ^~~~~~~~~~
+../Core/Src/main.c:36:19: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   36 |  uint32_t* AFRH = 0x40020020; // địa chỉ bộ ngoại vi
+      |                   ^~~~~~~~~~
+../Core/Src/main.c:43:18: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   43 |  uint32_t* BRR = 0x40004408; // địa chỉ tốc độ truy�?n
+      |                  ^~~~~~~~~~
+../Core/Src/main.c:46:18: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   46 |  uint32_t* CR1 = 0x4000440c;
+      |                  ^~~~~~~~~~
+../Core/Src/main.c:54:18: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   54 |  uint32_t* CR3 = 0x40004414;
+      |                  ^~~~~~~~~~
+../Core/Src/main.c: In function 'truyen_uart2':
+../Core/Src/main.c:63:17: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   63 |  uint32_t* SR = 0x40004400;
+      |                 ^~~~~~~~~~
+../Core/Src/main.c:64:17: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   64 |  uint32_t* DR = 0x40004404;
+      |                 ^~~~~~~~~~
+../Core/Src/main.c:67:14: warning: array subscript has type 'char' [-Wchar-subscripts]
+   67 |  while(truyen[uart] !='\0'){
+      |              ^
+../Core/Src/main.c:69:20: warning: array subscript has type 'char' [-Wchar-subscripts]
+   69 |   *DR = truyen[uart++];     // SR lên TXE đang trống, ghi dữ liệu vào
+      |                ~~~~^~
+../Core/Src/main.c: In function 'uart_DMA1':
+../Core/Src/main.c:77:19: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   77 |  uint32_t* S7CR = 0x400260b8;
+      |                   ^~~~~~~~~~
+../Core/Src/main.c:78:21: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   78 |  uint32_t* S7NDTR = 0x400260bc;
+      |                     ^~~~~~~~~~
+../Core/Src/main.c:79:20: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   79 |  uint32_t* S7PAR = 0x400260c0;
+      |                    ^~~~~~~~~~
+../Core/Src/main.c:80:21: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   80 |  uint32_t* S7M0AR = 0x400260c4;
+      |                     ^~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:113:3: warning: "/*" within comment [-Wcomment]
+  113 |  //*PR |=1<<0;
+      |    
+arm-none-eabi-gcc -o "UART.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\Nhung\bai_tap\UART\STM32F411VEHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="UART.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: UART.elf
+ 
+arm-none-eabi-size   UART.elf 
+arm-none-eabi-objdump -h -S  UART.elf  > "UART.list"
+   text	   data	    bss	    dec	    hex	filename
+   2132	     20	   1572	   3724	    e8c	UART.elf
+Finished building: default.size.stdout
+ 
+Finished building: UART.list
+ 
+
+23:08:25 Build Finished. 0 errors, 15 warnings. (took 710ms)
+

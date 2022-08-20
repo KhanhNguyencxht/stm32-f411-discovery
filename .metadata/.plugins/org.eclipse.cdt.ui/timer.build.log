@@ -1,0 +1,65 @@
+22:11:09 **** Incremental Build of configuration Debug for project timer ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:18:21: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   18 |  void* diachi_ram = 0x20000000;
+      |                     ^~~~~~~~~~
+../Core/Src/main.c:19:23: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   19 |  void* diachi_flash = 0x08000000;
+      |                       ^~~~~~~~~~
+../Core/Src/main.c:22:19: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+   22 |  uint32_t* VTOR = 0xe000ed08;  // báo với arm địa chỉ bảng vector table d�?i lên ram
+      |                   ^~~~~~~~~~
+../Core/Src/main.c:25:27: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |  uint32_t* dangky_timer = 0x200000a4;   // đăng ký địa chỉ tim1, 0x000000a4 là địa chỉ cũ tim1 trong bảng vetor table,
+      |                           ^~~~~~~~~~
+../Core/Src/main.c:28:15: warning: assignment to 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   28 |  dangky_timer = 0x200000a4;
+      |               ^
+../Core/Src/main.c: In function 'setup_timer':
+../Core/Src/main.c:39:23: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   39 |  uint32_t* TIM1_PSC = 0x40010028;
+      |                       ^~~~~~~~~~
+../Core/Src/main.c:40:23: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   40 |  uint32_t* TIM1_ARR = 0x4001002c;
+      |                       ^~~~~~~~~~
+../Core/Src/main.c:41:23: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   41 |  uint32_t* TIM1_CR1 = 0x40010000;  // BẬT BỘ �?ẾM COUTER
+      |                       ^~~~~~~~~~
+../Core/Src/main.c:45:24: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   45 |  uint32_t* TIM1_DIER = 0x4001000c;
+      |                        ^~~~~~~~~~
+../Core/Src/main.c:47:25: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+   47 |  uint32_t* NVIC_ISER0 = 0xe000e100;
+      |                         ^~~~~~~~~~
+../Core/Src/main.c: In function 'setup_led':
+../Core/Src/main.c:53:25: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   53 |  uint32_t* GPIOD_MOER = 0x40020c00;
+      |                         ^~~~~~~~~~
+../Core/Src/main.c: In function 'tim1':
+../Core/Src/main.c:59:22: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   59 |  uint32_t* TIM1_SR = 0x40010010;
+      |                      ^~~~~~~~~~
+../Core/Src/main.c: In function 'TIM1_UP_TIM10_IRQHandler':
+../Core/Src/main.c:68:22: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   68 |  uint32_t* TIM1_SR = 0x40010010;
+      |                      ^~~~~~~~~~
+../Core/Src/main.c: In function 'nhay_led':
+../Core/Src/main.c:73:24: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   73 |  uint32_t* GPIOD_ODR = 0x40020c14;
+      |                        ^~~~~~~~~~
+arm-none-eabi-gcc -o "timer.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\Nhung\bai_tap\timer\STM32F411VEHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="timer.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: timer.elf
+ 
+arm-none-eabi-size   timer.elf 
+arm-none-eabi-objdump -h -S  timer.elf  > "timer.list"
+   text	   data	    bss	    dec	    hex	filename
+   2036	     20	   1572	   3628	    e2c	timer.elf
+Finished building: default.size.stdout
+ 
+Finished building: timer.list
+ 
+
+22:11:10 Build Finished. 0 errors, 14 warnings. (took 646ms)
+

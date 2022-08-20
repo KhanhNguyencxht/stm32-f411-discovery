@@ -1,0 +1,45 @@
+21:16:50 **** Incremental Build of configuration Debug for project pwm ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:6:6: warning: return type of 'main' is not 'int' [-Wmain]
+    6 | void main(){
+      |      ^~~~
+../Core/Src/main.c: In function 'pwm':
+../Core/Src/main.c:13:20: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   13 |  uint32_t* MODER = 0x40020c00;
+      |                    ^~~~~~~~~~
+../Core/Src/main.c:17:19: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   17 |  uint32_t* AFRH = 0x40020c24;
+      |                   ^~~~~~~~~~
+../Core/Src/main.c:22:18: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   22 |  uint32_t* PSC = 0x40000828;
+      |                  ^~~~~~~~~~
+../Core/Src/main.c:23:18: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   23 |  uint32_t* ARR = 0x4000082c;
+      |                  ^~~~~~~~~~
+../Core/Src/main.c:24:19: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |  uint32_t* CCR1 = 0x40000834;
+      |                   ^~~~~~~~~~
+../Core/Src/main.c:29:20: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   29 |  uint32_t* CCMR1 = 0x40000818; // địa chỉ của thanh mode sử dụng kênh CH1 thì địa chỉ là CCMR1....
+      |                    ^~~~~~~~~~
+../Core/Src/main.c:33:19: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   33 |  uint32_t* CCER = 0x40000820; // địa chỉ của kênh CH1
+      |                   ^~~~~~~~~~
+../Core/Src/main.c:35:18: warning: initialization of 'uint32_t *' {aka 'long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   35 |  uint32_t* CR1 = 0x40000800; // bộ đếm couter timer của TIM4;
+      |                  ^~~~~~~~~~
+arm-none-eabi-gcc -o "pwm.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\Nhung\bai_tap\pwm\STM32F411VEHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="pwm.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: pwm.elf
+ 
+arm-none-eabi-size   pwm.elf 
+arm-none-eabi-objdump -h -S  pwm.elf  > "pwm.list"
+   text	   data	    bss	    dec	    hex	filename
+   1084	     12	   1572	   2668	    a6c	pwm.elf
+Finished building: default.size.stdout
+ 
+Finished building: pwm.list
+ 
+
+21:16:50 Build Finished. 0 errors, 9 warnings. (took 904ms)
+
